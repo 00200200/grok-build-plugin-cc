@@ -7,7 +7,7 @@ import { writeExecutable } from "./helpers.mjs";
 /**
  * Install a fake `grok` binary that responds to version/models/-p/import for hermetic tests.
  * @param {string} binDir directory that will be prepended to PATH
- * @param {"default"|"not-logged-in"|"fail-print"|"import-ok"} scenario
+ * @param {"default"|"not-logged-in"|"fail-print"|"import-ok"|"reject-json-schema"} scenario
  */
 export function installFakeGrok(binDir, scenario = "default") {
   fs.mkdirSync(binDir, { recursive: true });
@@ -85,6 +85,11 @@ if (isPrint || hasFlag("-r") || hasFlag("--resume") || hasFlag("-c") || hasFlag(
   }
 
   const prompt = printIndex !== -1 ? (argv[printIndex + 1] ?? "") : "";
+  if (scenario === "reject-json-schema" && hasFlag("--json-schema")) {
+    process.stderr.write("error: unexpected argument '--json-schema' found\\n");
+    process.stderr.write("Usage: grok --single <PROMPT> --cwd <CWD> --agent <NAME> --sandbox <PROFILE> --always-approve --output-format <OUTPUT_FORMAT>\\n");
+    process.exit(2);
+  }
   const wantsJson = hasFlag("--json-schema") || flagValue("--output-format") === "json";
 
   if (wantsJson || /critique|adversarial|structured|Return only valid JSON/i.test(prompt)) {

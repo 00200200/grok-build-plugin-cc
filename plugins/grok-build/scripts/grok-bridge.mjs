@@ -16,7 +16,6 @@ import {
   getGrokAuthStatus,
   getGrokAvailability,
   parseStructuredOutput,
-  readOutputSchema,
   runHeadlessAgent,
   runImport,
   schemaInstructionsFromPath
@@ -336,7 +335,6 @@ async function executeReviewRun(request) {
     model: request.model,
     effort: request.effort,
     outputFormat: structured ? "json" : "plain",
-    jsonSchema: structured ? readOutputSchema(REVIEW_SCHEMA) : undefined,
     onProgress: request.onProgress
   });
 

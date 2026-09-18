@@ -191,11 +191,11 @@ function buildHeadlessArgs(prompt, options = {}) {
   } else {
     args.push("--output-format", "plain");
   }
-  if (options.jsonSchema) {
-    const schemaText =
-      typeof options.jsonSchema === "string" ? options.jsonSchema : JSON.stringify(options.jsonSchema);
-    args.push("--json-schema", schemaText);
-  }
+  // `--json-schema` is advertised in `grok --help` but rejected by the
+  // `--single`/`-p` + `--agent` parser the bridge uses (exit 2 on CLI 0.2.11).
+  // Structured critique/review still constrain the model by embedding the
+  // schema in the prompt (`schemaInstructionsFromPath`) and requesting
+  // `--output-format json`. See https://github.com/xai-org/grok-build-plugin-cc/issues/35
 
   return args;
 }
