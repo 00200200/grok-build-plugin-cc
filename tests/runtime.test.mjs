@@ -207,6 +207,7 @@ test("critique forwards --model and --effort to grok", () => {
   assert.equal(argv[argv.indexOf("--model") + 1], "grok-build");
   assert.ok(argv.includes("--effort"));
   assert.equal(argv[argv.indexOf("--effort") + 1], "medium");
+  assert.ok(argv.includes("--json-schema"));
 });
 
 test("review rejects unsupported --effort values", () => {
